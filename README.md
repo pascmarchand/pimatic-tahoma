@@ -1,4 +1,4 @@
-pimatic-plugin-template
+pimatic-tahoma
 =======================
 
 See the [development guide](https://pimatic.teamemo.com/Development) for

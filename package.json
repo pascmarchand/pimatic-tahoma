@@ -1,14 +1,14 @@
-{ 
-  "name": "pimatic-plugin-template",
-  "description": "The plugin description",
+{
+  "name": "pimatic-tahoma",
+  "description": "Bind for Somfy shutters connected to Tahoma",
   "author": "Your Name <you@example.com> (http://your-website)",
   "license": "GPL-2.0",
-  "main": "my-plugin",
+  "main": "tahoma",
   "files": [
-    "my-plugin.coffee",
+    "tahoma.coffee",
     "README.md",
     "LICENSE",
-    "my-plugin-config-schema.coffee"
+    "tahoma-config-schema.coffee"
   ],
   "keywords": [
     "pimatic",
@@ -19,11 +19,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/pimatic/pimatic-plugin-template.git"
+    "url": "https://github.com/pascmarchand/pimatic-tahoma.git"
   },
-  "configSchema": "my-plugin-config-schema.coffee",
-  "dependencies": {
-  },
+  "configSchema": "tahoma-config-schema.coffee",
+  "dependencies": {},
   "peerDependencies": {
     "pimatic": "0.9.*"
   },
