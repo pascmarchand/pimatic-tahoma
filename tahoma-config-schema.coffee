@@ -4,12 +4,18 @@ module.exports = {
   title: "Tahoma config options"
   type: "object"
   properties:
-    consumerKey:
-      description: "Consumer Key"
+    host:
+      description: "Overkiz Api Url"
       type: "string"
-      default: "foo"
-    consumerSecret:
-      description: "Consumer Secret"
+      default: "ha101-1.overkiz.com"
+    user:
+      description: "Tahoma Username"
       type: "string"
-      default: "foo"
+      default: ""
+      required: yes
+    password:
+      description: "Tahoma Password"
+      type: "string"
+      default: ""
+      required: yes
 }

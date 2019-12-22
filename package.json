@@ -22,7 +22,9 @@
     "url": "https://github.com/pascmarchand/pimatic-tahoma.git"
   },
   "configSchema": "tahoma-config-schema.coffee",
-  "dependencies": {},
+  "dependencies": {
+    "overkiz-api": "^1.0.4"
+  },
   "peerDependencies": {
     "pimatic": "0.9.*"
   },
