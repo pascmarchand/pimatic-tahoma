@@ -46,7 +46,7 @@ module.exports = (env) ->
 
       env.logger.info("user= #{user}, url=#{host}")
       api = new Overkiz.API({
-        host: 'ha101-1.overkiz.com',
+        host: host,
         user: user,
         password: password,
         polling: {
@@ -78,6 +78,7 @@ module.exports = (env) ->
 
       # Returns a promise that is fulfilled when done.
       moveToPosition: (position) ->
+        env.logger.info(position)
         @_setPosition(position)
         return Promise.resolve()
 
