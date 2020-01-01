@@ -56,6 +56,27 @@ module.exports = (env) ->
       });
       @loadDevices = api.getDevices()
 
+      @framework.deviceManager.on('discover', (eventData) =>
+
+        @framework.deviceManager.discoverMessage(
+          'pimatic-tahoma', "Waiting for Tahoma devices"
+        )
+
+        @loadDevices.then((devices) =>
+          for device in devices
+            if device.uiClass is 'RollerShutter'
+              config = {
+                "id": "#{device.name}-shutter",
+                "name": device.name,
+                "class": "SomfyShutter",
+                "deviceUrl": device.URL
+              }
+              @framework.deviceManager.discoveredDevice(
+                'pimatic-tahoma', device.name, config
+              )
+        )
+      )
+
       @framework.deviceManager.registerDeviceClass("SomfyShutter", {
         configDef: deviceConfigDef.SomfyShutter,
         createCallback: (config, lastState) => new SomfyShutter(config, lastState, @loadDevices)
