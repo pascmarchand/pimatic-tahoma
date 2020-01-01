@@ -72,6 +72,7 @@ module.exports = (env) ->
         devices.then((dev) =>
           for device in dev
             if @deviceUrl is device.URL
+              assert device.uiClass is 'RollerShutter', "Device isn't a shutter"
               env.logger.info "Init shutter #{@name} with id #{@deviceUrl}"
               @_device = device
               return
@@ -85,18 +86,12 @@ module.exports = (env) ->
 
       # Returns a promise that is fulfilled when done.
       moveToPosition: (position) ->
-        if position is 'down'
-          return @_device.exec({
-            name: "setClosure",
-            parameters: [100]
-          })
-        else if position is 'up'
-          return @_device.exec({
-            name: "setClosure",
-            parameters: [0]
-          })
-        else
-          @_setPosition(position)
+        percentage = if position is 'down' then 100 else 0
+        @_device.exec({
+          name: "setClosure",
+          parameters: [percentage]
+        }).then(@_setPosition(position))
+          .catch(env.logger.error);
         return Promise.resolve()
 
       destroy: () ->
