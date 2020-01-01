@@ -54,22 +54,29 @@ module.exports = (env) ->
           interval: 1000
         }
       });
-      api.getDevices()
-        .then(env.logger.info)
-        .catch(env.logger.error)
+      @loadDevices = api.getDevices()
 
       @framework.deviceManager.registerDeviceClass("SomfyShutter", {
         configDef: deviceConfigDef.SomfyShutter,
-        createCallback: (config) => new SomfyShutter(config)
+        createCallback: (config, lastState) => new SomfyShutter(config, lastState, @loadDevices)
       })
 
     class SomfyShutter extends env.devices.ShutterController
-      constructor: (@config, lastState) ->
+      constructor: (@config, lastState, devices) ->
         @name = @config.name
         @id = @config.id
         @deviceUrl = @config.deviceUrl
         @rollingTime = @config.rollingTime
         @_position = lastState?.position?.value or 'stopped'
+
+        devices.then((dev) =>
+          for device in dev
+            if @deviceUrl is device.URL
+              env.logger.info "Init shutter #{@name} with id #{@deviceUrl}"
+              @_device = device
+              return
+          env.logger.error "Shutter #{@name} couldn't be initialized"
+        ).catch(env.logger.error);
         super()
 
       stop: ->
@@ -78,8 +85,18 @@ module.exports = (env) ->
 
       # Returns a promise that is fulfilled when done.
       moveToPosition: (position) ->
-        env.logger.info(position)
-        @_setPosition(position)
+        if position is 'down'
+          return @_device.exec({
+            name: "setClosure",
+            parameters: [100]
+          })
+        else if position is 'up'
+          return @_device.exec({
+            name: "setClosure",
+            parameters: [0]
+          })
+        else
+          @_setPosition(position)
         return Promise.resolve()
 
       destroy: () ->
